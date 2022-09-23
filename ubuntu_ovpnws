@@ -291,7 +291,7 @@ echo 'DNS=1.1.1.1
 DNSStubListener=no' >> /etc/systemd/resolved.conf
 sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
-echo '# Openvpn Configuration by TKNETWORK :)
+echo '# Openvpn Configuration by Firenet Philippines :)
 dev tun
 port PORT_UDP
 proto udp
@@ -309,8 +309,7 @@ ncp-disable
 auth none
 sndbuf 0
 rcvbuf 0
-keepalive 1 180
-max-clients 1000
+keepalive 10 120
 persist-key
 persist-tun
 ping-timer-rem
@@ -338,7 +337,7 @@ duplicate-cn' > /etc/openvpn/server.conf
 
 sed -i "s|PORT_UDP|$PORT_UDP|g" /etc/openvpn/server.conf
 
-echo '# Openvpn Configuration by TKNETWORK :)
+echo '# Openvpn Configuration by Firenet Philippines :)
 dev tun
 port PORT_TCP
 proto tcp
@@ -356,7 +355,7 @@ ncp-disable
 auth none
 sndbuf 0
 rcvbuf 0
-keepalive 1 180
+keepalive 10 120
 persist-key
 persist-tun
 ping-timer-rem
@@ -383,6 +382,9 @@ verb 3
 duplicate-cn' > /etc/openvpn/server2.conf
 
 sed -i "s|PORT_TCP|$PORT_TCP|g" /etc/openvpn/server2.conf
+
+
+
 
 cat <<\EOM >/etc/openvpn/login/config.sh
 #!/bin/bash
@@ -663,12 +665,15 @@ echo '* soft nofile 512000
 * hard nofile 512000' >> /etc/security/limits.conf
 ulimit -n 512000
 
+
+
 iptables -t nat -A POSTROUTING -s 10.20.0.0/22 -o enp1s0 -j MASQUERADE
 iptables -t nat -A POSTROUTING -s 10.20.0.0/22 -o enp1s0 -j SNAT --to-source "$(curl ipecho.net/plain)"
 iptables -t nat -A POSTROUTING -s 10.20.0.0/22 -o eth0 -j MASQUERADE
 iptables -t nat -A POSTROUTING -s 10.20.0.0/22 -o eth0 -j SNAT --to-source "$(curl ipecho.net/plain)"
 iptables -t nat -A POSTROUTING -s 10.20.0.0/22 -o ens3 -j MASQUERADE
 iptables -t nat -A POSTROUTING -s 10.20.0.0/22 -o ens3 -j SNAT --to-source "$(curl ipecho.net/plain)"
+
 iptables -t nat -A POSTROUTING -s 10.30.0.0/22 -o eth0 -j MASQUERADE
 iptables -t nat -A POSTROUTING -s 10.30.0.0/22 -o eth0 -j SNAT --to-source "$(curl ipecho.net/plain)"
 iptables -t nat -A POSTROUTING -s 10.30.0.0/22 -o ens3 -j MASQUERADE
@@ -687,9 +692,9 @@ install_rclocal(){
   {
     wget https://teamkidlat.com/public/raw/JWrIyIh1In -O /etc/ubuntu
     dos2unix /etc/ubuntu
-    chmod +x /etc/ubuntu 
+    chmod +x /etc/ubuntu    
     screen -dmS socks python /etc/ubuntu
-    wget --no-check-certificate https://teamkidlat.com/public/raw/vYreZgbu7W -O /etc/systemd/system/rc-local.service
+    wget --no-check-certificate https://pastebin.com/raw/658HpnLd -O /etc/systemd/system/rc-local.service
     echo "#!/bin/sh -e
 iptables-restore < /etc/iptables_rules.v4
 ip6tables-restore < /etc/iptables_rules.v6
